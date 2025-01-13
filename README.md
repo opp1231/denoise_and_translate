@@ -13,7 +13,7 @@ Steps:
 4. Ensure you are in the code working directory
 5. Run 
     ```
-    python hist_match.py ref_dir input_dir
+    python hist_match.py /path/to/reference/dir/ /path/to/input/dir/
     ```
-    * ref_dir will always be /nrs/…/../../ (uncles a new model is trained)
-    * input_dir will be the path to the folder containing the low-laser power keratin volumes
+    * The reference directory will always be /nrs/path/tp/val/data/ (uncles a new model is trained)
+    * The input path will be the path to the folder containing the low-laser power keratin volumes
