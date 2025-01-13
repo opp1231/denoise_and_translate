@@ -56,7 +56,7 @@ Nuclear signal is predicted from the denoised keratin signal using [fnet](https:
 1. Create a new python environment with your preferred environment manager (we suggest miniforge)
 2. Clone the fnet repository
     * The predict.py file in the fnet codebase (/fnet/cli/predict.py) needs to be edited to allow "big" tiffs.
-        o In predict.py, rewrite the function "save_tiff" as follows
+        * In predict.py, rewrite the function "save_tiff" as follows
         ```
         def save_tif(fname: str, ar: np.ndarray, path_root: str) -> str:
         """Saves a tif and returns tif save path relative to root save directory.
