@@ -110,7 +110,8 @@ Nuclear signal is predicted from the denoised keratin signal using [fnet](https:
 Nuclear signal is predicted from the denoised keratin signal using [fnet](https://github.com/AllenCellModeling/pytorch_fnet)
 
 #### Segmentation
-Temp
+The raw results from the image translation include some spurious signal from poorly defined keratin signal. As such, we will use a pre-trained CellPose model to segment nuclei and clean the volumes. This assumes one already installed a working copy of CellPose.
+
 ##### Steps: 
 1. Create a new python environment with your preferred environment manager (we suggest miniforge)
 2. Clone the fnet repository
@@ -158,7 +159,7 @@ Temp
     * The input path will be the path to the folder containing the low-laser power keratin volumes
 
 #### File Renaming
-Temp
+Throughout the pipeline, the images will have been renamed "im_x.tif". To make these again compatible with the MOSAIC processing pipeline, we need to rename them accordingly. 
 
 #### MOSAIC Pipeline
-Temp
+The denoiser was trained on deconvolved volumes as ground truth, so the only module which needs to be run is the "deskew" option, if the scanning mode necessitates it. (Note: since the training data was taken in XY-scanning mode, deskewing was required. It is recommended this remain consistent to preserve the features learned by the model)
