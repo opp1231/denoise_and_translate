@@ -11,6 +11,9 @@ Steps:
 2. Create a new python environment with your preferred environment manager (we suggest miniforge)
 3. Install the dependencies from requirements.txt
 4. Ensure you are in the code working directory
-5. Run “python hist_match.py ref_dir input_dir”
+5. Run 
+    ```
+    python hist_match.py ref_dir input_dir
  * ref_dir will always be /nrs/…/../../ (uncles a new model is trained)
- * input_dir will be the path to the folder containing the low-laser power keratin volumes 
+ * input_dir will be the path to the folder containing the low-laser power keratin volumes
+    ```
