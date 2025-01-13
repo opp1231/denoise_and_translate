@@ -31,15 +31,16 @@ Since the intensity information is not compared experiment to experiment, this i
     ```
     python hist_match.py /path/to/reference/dir/ /path/to/input/dir/
     ```
-    * The reference directory will always be /nrs/path/tp/val/data/ (uncles a new model is trained)
+    * The reference directory will always be /nrs/path/to/val/data/ (uncles a new model is trained)
     * The input path will be the path to the folder containing the low-laser power keratin volumes
 
 ### Denoising
-Temp
+Input keratin signal is denoised using [3D-RCAN](https://github.com/AiviaCommunity/3D-RCAN). 
 
 #### Steps: 
-1. Create a new python environment with your preferred environment manager (we suggest miniforge)
-2. Install the dependencies from requirements_processing.txt
+1. Create a new python environment with your preferred environment manager.
+2. Clone the 3D-RCAN repository.
+2. Install the dependencies from requirements_rcan.txt
 3. Ensure you are in the code working directory
 4. Run 
     ```
@@ -49,13 +50,49 @@ Temp
     * The input path will be the path to the folder containing the hist_matched low-laser power keratin volumes
 
 ### Image Translation
-Temp
+Nuclear signal is predicted from the denoised keratin signal using [fnet](https://github.com/AllenCellModeling/pytorch_fnet)
 
 #### Steps: 
 1. Create a new python environment with your preferred environment manager (we suggest miniforge)
-2. Install the dependencies from requirements_processing.txt
-3. Ensure you are in the code working directory
-4. Run 
+2. Clone the fnet repository
+    * The predict.py file in the fnet codebase (/fnet/cli/predict.py) needs to be edited to allow "big" tiffs.
+        o In predict.py, rewrite the function "save_tiff" as follows
+        ```
+        def save_tif(fname: str, ar: np.ndarray, path_root: str) -> str:
+        """Saves a tif and returns tif save path relative to root save directory.
+
+        Image will be stored at: 'path_root/tifs/fname'
+
+        Parameters
+        ----------
+        fname
+            Basename of save path.
+        ar
+            Array to be saved as tif.
+        path_root
+            Root directory of save path.
+
+        Returns
+        -------
+        str
+            Save path relative to root directory.
+
+        """
+        norm_arr = (2**8)*(ar - np.min(ar))/(np.max(ar)-np.min(ar))
+        norm_arr_u8 = norm_arr.astype(np.uint8)
+        path_tif_dir = os.path.join(path_root, "tifs")
+        if not os.path.exists(path_tif_dir):
+            os.makedirs(path_tif_dir)
+            logger.info(f"Created: {path_tif_dir}")
+        path_save = os.path.join(path_tif_dir, fname)
+        # tifffile.imsave(path_save, ar, compress=2)
+        tifffile.imsave(path_save,norm_arr_u8,compress=2,bigtiff=True)
+        logger.info(f"Saved: {path_save} normalized")
+        return os.path.relpath(path_save, path_root)
+        ```
+3. Install the dependencies from requirements_fnet.txt
+4. Ensure you are in the code working directory
+5. Run 
     ```
     python hist_match.py /path/to/reference/dir/ /path/to/input/dir/
     ```
