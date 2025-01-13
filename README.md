@@ -3,7 +3,7 @@ Processing code and instructions for running 3D-RCAN for denoising, followed by 
 
 ## Instructions
 ### Histogram Matching
-To best-replicating the denoising and prediction, it is best-practice to histogram match the inputs to the training data
+To best-replicate the denoising and prediction, it is best-practice to histogram match the inputs to the training data
 Since the intensity information is not compared experiment to experiment, this is fine to do.
 
 Steps: 
