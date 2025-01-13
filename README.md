@@ -6,7 +6,7 @@ Processing code and instructions for running 3D-RCAN for denoising, followed by 
 To best-replicate the denoising and prediction, it is best-practice to histogram match the inputs to the training data
 Since the intensity information is not compared experiment to experiment, this is fine to do.
 
-Steps: 
+#### Steps: 
 1. Clone the environment 
 2. Create a new python environment with your preferred environment manager (we suggest miniforge)
 3. Install the dependencies from requirements.txt
