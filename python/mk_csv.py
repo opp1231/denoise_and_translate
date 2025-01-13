@@ -7,7 +7,7 @@ from pathlib import Path, PurePath
 def parse_args():
 
 	parser = argparse.ArgumentParser(description="Creates .csv to define input/output paths for images to send to fnet.predict")
-	parser.add_argument('data_dir', type=Path, help='path to data root')
+	parser.add_argument('data_dir', type=Path, help='path to save csv')
 	parser.add_argument('inpath', type=Path, help='path to input directory')
 	args = parser.parse_args()
 

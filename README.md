@@ -11,12 +11,12 @@ Start by cloning this environment into a directory.
     + CUDA 10.0 and cuDNN 7.6.5 
 
 * The processing steps and fnet image translation were similarly run but with the following changes
-    + Ubuntu (24.04.1)
+    + Ubuntu (24.04.1) (explicitly not tested on Windows)
     + CUDA 12.3 and cuDNN 8.9.7
 
 * This should all be transferable to a compute cluster, but is not yet supported.
 * Managing different CUDA installations is possible through an environment manager like [miniforge](https://mamba.readthedocs.io/en/latest/installation/mamba-installation.html) conda or mamba. 
-See [this](https://hamel.dev/notes/cuda.html) for help.
+See [this](https://docs.nvidia.com/cuda/cuda-installation-guide-microsoft-windows/#using-conda-to-install-the-cuda-software) and [this](https://hamel.dev/notes/cuda.html) for help.
 
 ## Instructions
 ### Histogram Matching
@@ -26,7 +26,7 @@ Since the intensity information is not compared experiment to experiment, this i
 #### Steps: 
 1. Create a new python environment with your preferred environment manager (we suggest miniforge)
 2. Install the dependencies from requirements_processing.txt
-3. Ensure you are in the code working directory
+3. Ensure you are in the rcan working directory
 4. Run 
     ```
     python hist_match.py /path/to/reference/dir/ /path/to/input/dir/
@@ -40,7 +40,8 @@ Input keratin signal is denoised using [3D-RCAN](https://github.com/AiviaCommuni
 #### Steps: 
 1. Create a new python environment with your preferred environment manager.
 2. Clone the 3D-RCAN repository.
-2. Install the dependencies from requirements_rcan.txt
+2. Install the dependencies from requirements_rcan.txt (including the specific CUDA and cudnn versions, if necessary).
+    * If running this on Windows, you may need to ensure your CUDA path is set correctly. See [this](https://stackoverflow.com/questions/69632875/cuda-path-not-detected-set-cuda-path-environment-variable-if-cupy-fails-to-load) for help.
 3. Ensure you are in the code working directory
 4. Run 
     ```
@@ -50,7 +51,7 @@ Input keratin signal is denoised using [3D-RCAN](https://github.com/AiviaCommuni
     * The input path will be the path to the folder containing the hist_matched low-laser power keratin volumes
 
 ### Image Translation
-Nuclear signal is predicted from the denoised keratin signal using [fnet](https://github.com/AllenCellModeling/pytorch_fnet)
+Nuclear signal is predicted from the denoised keratin signal using [fnet](https://github.com/AllenCellModeling/pytorch_fnet).
 
 #### Steps: 
 1. Create a new python environment with your preferred environment manager (we suggest miniforge)
@@ -90,13 +91,20 @@ Nuclear signal is predicted from the denoised keratin signal using [fnet](https:
         return os.path.relpath(path_save, path_root)
         ```
 3. Install the dependencies from requirements_fnet.txt
-4. Ensure you are in the code working directory
-5. Run 
+4. Create the .csv to feed into fnet/predict.py.
+    * Run 
     ```
-    python hist_match.py /path/to/reference/dir/ /path/to/input/dir/
+    python mk_csv.py /path/to/csv/save/dir/ /path/to/input/dir/
     ```
-    * The reference directory will always be /nrs/path/tp/val/data/ (uncles a new model is trained)
-    * The input path will be the path to the folder containing the low-laser power keratin volumes
+    * The save directory is simply where you want to save the csv file.
+4. Ensure you are in the fnet working directory
+5. Edit the "predict_options.json".
+    * The only thing one should need to change is the path to the csv created in the previous step.
+    * The model path should not be changed unless a new model is trained.
+6. Run 
+    ```
+    fnet predict.py --json /path/to/predict_options.json
+    ```
 
 ### Post-Processing
 Nuclear signal is predicted from the denoised keratin signal using [fnet](https://github.com/AllenCellModeling/pytorch_fnet)
