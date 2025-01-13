@@ -15,11 +15,41 @@ Start by cloning this environment into a directory.
     + CUDA 12.3 and cuDNN 8.9.7
 
 * This should all be transferable to a compute cluster, but is not yet supported.
+* Managing different CUDA installations is possible through an environment manager like [miniforge](https://mamba.readthedocs.io/en/latest/installation/mamba-installation.html) conda or mamba. 
+See [this](https://hamel.dev/notes/cuda.html) for help.
 
 ## Instructions
 ### Histogram Matching
 To best-replicate the denoising and prediction, it is best-practice to histogram match the inputs to the training data
 Since the intensity information is not compared experiment to experiment, this is fine to do.
+
+#### Steps: 
+1. Create a new python environment with your preferred environment manager (we suggest miniforge)
+2. Install the dependencies from requirements_processing.txt
+3. Ensure you are in the code working directory
+4. Run 
+    ```
+    python hist_match.py /path/to/reference/dir/ /path/to/input/dir/
+    ```
+    * The reference directory will always be /nrs/path/tp/val/data/ (uncles a new model is trained)
+    * The input path will be the path to the folder containing the low-laser power keratin volumes
+
+### Denoising
+Temp
+
+#### Steps: 
+1. Create a new python environment with your preferred environment manager (we suggest miniforge)
+2. Install the dependencies from requirements_processing.txt
+3. Ensure you are in the code working directory
+4. Run 
+    ```
+    python apply.py -m /path/to/model/dir/ -i /path/to/input/dir/ -o /path/to/output/dir/ -b 16 --normalize_output_range_between_zero_and_one
+    ```
+    * The model directory will always be /nrs/path/to/model/dir/ (uncles a new model is trained)
+    * The input path will be the path to the folder containing the hist_matched low-laser power keratin volumes
+
+### Image Translation
+Temp
 
 #### Steps: 
 1. Create a new python environment with your preferred environment manager (we suggest miniforge)
