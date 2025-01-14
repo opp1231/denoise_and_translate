@@ -127,13 +127,15 @@ def save_tif(fname: str, ar: np.ndarray, path_root: str) -> str:
         Save path relative to root directory.
 
     """
+    norm_arr = (2**8)*(ar - np.min(ar))/(np.max(ar)-np.min(ar))
+    norm_arr_u8 = norm_arr.astype(np.uint8)
     path_tif_dir = os.path.join(path_root, "tifs")
     if not os.path.exists(path_tif_dir):
         os.makedirs(path_tif_dir)
         logger.info(f"Created: {path_tif_dir}")
     path_save = os.path.join(path_tif_dir, fname)
-    tifffile.imsave(path_save, ar, compress=2)
-    logger.info(f"Saved: {path_save}")
+    tifffile.imsave(path_save,norm_arr_u8,compress=2,bigtiff=True)
+    logger.info(f"Saved: {path_save} normalized")
     return os.path.relpath(path_save, path_root)
 
 

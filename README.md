@@ -22,6 +22,8 @@ Clone this reponsitory into your local directory by running
 ```
 git clone https://github.com/opp1231/denoise_and_translate
 ```
+Note: these instructions assume you are working in the directory into which this repository is cloned. If not, preface each executable file with the path to the python folder of this repository.
+
 ### Histogram Matching
 To best-replicate the denoising and prediction, it is best-practice to histogram match the inputs to the training data
 Since the intensity information is not compared experiment to experiment, this is fine to do.
@@ -30,6 +32,7 @@ Since the intensity information is not compared experiment to experiment, this i
 1. Create a new python environment with your preferred environment manager (we suggest miniforge)
     ```
     conda create -n processing
+    conda activate processing
     ```
 2. Install the dependencies from requirements_processing.txt
     ```
@@ -42,6 +45,10 @@ Since the intensity information is not compared experiment to experiment, this i
     ```
     * The reference directory will always be /nrs/path/to/val/data/ (uncles a new model is trained)
     * The input path will be the path to the folder containing the low-laser power keratin volumes
+5. Deactivate the environment
+    ```
+    conda deactivate
+    ```
 
 ### Denoising
 Input keratin signal is denoised using [3D-RCAN](https://github.com/AiviaCommunity/3D-RCAN). 
@@ -50,6 +57,7 @@ Input keratin signal is denoised using [3D-RCAN](https://github.com/AiviaCommuni
 1. Create a new python environment with your preferred environment manager with python=3.7
     ```
     conda create -n rcan python=3.7
+    conda activate rcan
     ```
 2. Install dependencies as follows
     ```
@@ -66,55 +74,38 @@ Input keratin signal is denoised using [3D-RCAN](https://github.com/AiviaCommuni
     * The model directory will always be /nrs/path/to/model/dir/ (uncles a new model is trained)
     * The input path will be the path to the folder containing the hist_matched low-laser power keratin volumes
     * The ouput path will be the path in which you want to save the denoised files
+5. Deactivate the environment
+    ```
+    conda deactivate
+    ```
 
 ### Image Translation
 Nuclear signal is predicted from the denoised keratin signal using [fnet](https://github.com/AllenCellModeling/pytorch_fnet).
 
 #### Steps: 
+##### Create csv for fnet i/o
+1. Activate the processing environment
+    ```
+    conda activate processing
+    ```
+2. Run mk_csv.py
+    ```
+    python mk_csv.py /path/to/data/root/ /path/to/input/data/dir/
+    ```
+    * The data root is the path to the upper experiment folder where the data lives. The .csv will be saved in this folder.
+    * The input folder is the path to the folder containing the denoised volumes.
+
+##### Initialize and run fnet
 1. Create a new python environment with your preferred environment manager (we suggest miniforge) with python = 3.7.
-2. Clone the fnet repository
-    * The predict.py file in the fnet codebase (/fnet/cli/predict.py) needs to be edited to allow "big" tiffs.
-        - In predict.py, rewrite the function "save_tiff" as follows
-        ```
-        def save_tif(fname: str, ar: np.ndarray, path_root: str) -> str:
-        """Saves a tif and returns tif save path relative to root save directory.
-
-        Image will be stored at: 'path_root/tifs/fname'
-
-        Parameters
-        ----------
-        fname
-            Basename of save path.
-        ar
-            Array to be saved as tif.
-        path_root
-            Root directory of save path.
-
-        Returns
-        -------
-        str
-            Save path relative to root directory.
-
-        """
-        norm_arr = (2**8)*(ar - np.min(ar))/(np.max(ar)-np.min(ar))
-        norm_arr_u8 = norm_arr.astype(np.uint8)
-        path_tif_dir = os.path.join(path_root, "tifs")
-        if not os.path.exists(path_tif_dir):
-            os.makedirs(path_tif_dir)
-            logger.info(f"Created: {path_tif_dir}")
-        path_save = os.path.join(path_tif_dir, fname)
-        tifffile.imsave(path_save,norm_arr_u8,compress=2,bigtiff=True)
-        logger.info(f"Saved: {path_save} normalized")
-        return os.path.relpath(path_save, path_root)
-        ```
-3. Install the dependencies from requirements_fnet.txt
-4. Create the .csv to feed into fnet/predict.py.
-    * Run 
     ```
-    python mk_csv.py /path/to/csv/save/dir/ /path/to/input/dir/
+    conda create -n fnet python=3.7
+    conda activate fnet
     ```
-    * The save directory is simply where you want to save the csv file.
-4. Ensure you are in the fnet working directory
+3. Install the dependencies 
+    ```
+    cd pytorch_fnet/
+    python -m pip install .
+    ```
 5. Edit the "predict_options.json".
     * The only thing one should need to change is the path to the csv created in the previous step.
     * The model path should not be changed unless a new model is trained.
