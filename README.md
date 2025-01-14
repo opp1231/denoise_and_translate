@@ -3,7 +3,7 @@ Processing code and instructions for running 3D-RCAN for denoising, followed by 
 Start by cloning this environment into a directory.
 ## Notes
 * The 3D-RCAN denoising was run on the following machine (but should also run on Linux)
-    + Ubuntu 24.04.1 LTS
+    + Ubuntu 24.04.1 LTS (or Windows 11)
     + Intel(R) Xeon(R) w7-3465X   2.50 GHz
     + 256 GB RAM
     + NVIDIA RTX A4000 (16GB VRAM)
@@ -32,6 +32,9 @@ Since the intensity information is not compared experiment to experiment, this i
     conda create -n processing
     ```
 2. Install the dependencies from requirements_processing.txt
+    ```
+    python -m pip install -r requirements_processing.txt
+    ```
 3. Ensure you are in the rcan working directory
 4. Run 
     ```
@@ -52,17 +55,17 @@ Input keratin signal is denoised using [3D-RCAN](https://github.com/AiviaCommuni
     ```
     conda install tensorflow-gpu=1.13.1
     conda install cudatoolkit=10.0.*
-    python -m pip install requirements_rcan.txt
+    python -m pip install -r requirements_rcan.txt
     ```
-2. Install the dependencies from requirements_rcan.txt (including the specific CUDA and cudnn versions, if necessary).
     * If running this on Windows, you may need to ensure your CUDA path is set correctly. See [this](https://stackoverflow.com/questions/69632875/cuda-path-not-detected-set-cuda-path-environment-variable-if-cupy-fails-to-load) for help.
 3. Ensure you are in the code working directory
 4. Run 
     ```
-    python apply.py -m /path/to/model/dir/ -i /path/to/input/dir/ -o /path/to/output/dir/ -b 16 --normalize_output_range_between_zero_and_one
+    python apply.py -m /path/to/model/dir/ -i /path/to/input/dir/ -o /path/to/output/dir/ -b 16 -B 24,128,128 --normalize_output_range_between_zero_and_one -f ome
     ```
     * The model directory will always be /nrs/path/to/model/dir/ (uncles a new model is trained)
     * The input path will be the path to the folder containing the hist_matched low-laser power keratin volumes
+    * The ouput path will be the path in which you want to save the denoised files
 
 ### Image Translation
 Nuclear signal is predicted from the denoised keratin signal using [fnet](https://github.com/AllenCellModeling/pytorch_fnet).
