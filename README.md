@@ -20,7 +20,7 @@ See [this](https://docs.nvidia.com/cuda/cuda-installation-guide-microsoft-window
 ## Instructions
 Clone this reponsitory into your local directory by running
 ```
-git clone [https://github.com/opp1231/denoise_and_translate](https://github.com/opp1231/denoise_and_translate)
+git clone https://github.com/opp1231/denoise_and_translate
 ```
 ### Histogram Matching
 To best-replicate the denoising and prediction, it is best-practice to histogram match the inputs to the training data
