@@ -12,7 +12,7 @@ Start by cloning this environment into a directory.
 
 * The processing steps and fnet image translation were similarly run but with the following changes
     + Ubuntu (24.04.1) (explicitly not tested on Windows)
-    + CUDA 12.3 and cuDNN 8.9.7
+    + CUDA 12.3 and cuDNN 8.9.2
 
 * This should all be transferable to a compute cluster, but is not yet supported.
 * Managing different CUDA installations is possible through an environment manager like [miniforge](https://mamba.readthedocs.io/en/latest/installation/mamba-installation.html) conda or mamba. 
@@ -38,8 +38,8 @@ Since the intensity information is not compared experiment to experiment, this i
 Input keratin signal is denoised using [3D-RCAN](https://github.com/AiviaCommunity/3D-RCAN). 
 
 #### Steps: 
-1. Create a new python environment with your preferred environment manager.
-2. Clone the 3D-RCAN repository.
+1. Create a new python environment with your preferred environment manager with python=3.7
+2. Install dependencies as stated on the repository's site.
 2. Install the dependencies from requirements_rcan.txt (including the specific CUDA and cudnn versions, if necessary).
     * If running this on Windows, you may need to ensure your CUDA path is set correctly. See [this](https://stackoverflow.com/questions/69632875/cuda-path-not-detected-set-cuda-path-environment-variable-if-cupy-fails-to-load) for help.
 3. Ensure you are in the code working directory
@@ -54,7 +54,7 @@ Input keratin signal is denoised using [3D-RCAN](https://github.com/AiviaCommuni
 Nuclear signal is predicted from the denoised keratin signal using [fnet](https://github.com/AllenCellModeling/pytorch_fnet).
 
 #### Steps: 
-1. Create a new python environment with your preferred environment manager (we suggest miniforge)
+1. Create a new python environment with your preferred environment manager (we suggest miniforge) with python = 3.7.
 2. Clone the fnet repository
     * The predict.py file in the fnet codebase (/fnet/cli/predict.py) needs to be edited to allow "big" tiffs.
         - In predict.py, rewrite the function "save_tiff" as follows
@@ -113,8 +113,8 @@ Nuclear signal is predicted from the denoised keratin signal using [fnet](https:
 The raw results from the image translation include some spurious signal from poorly defined keratin signal. As such, we will use a pre-trained CellPose model to segment nuclei and clean the volumes. This assumes one already installed a working copy of CellPose.
 
 ##### Steps: 
-1. Create a new python environment with your preferred environment manager (we suggest miniforge)
-2. Clone the fnet repository
+1. Create a new python environment with your preferred environment manager (we suggest miniforge) with python = 3.7.
+2. Clone the fnet repository and follow the installation instructions on the repository's page.
     * The predict.py file in the fnet codebase (/fnet/cli/predict.py) needs to be edited to allow "big" tiffs.
         - In predict.py, rewrite the function "save_tiff" as follows
         ```
