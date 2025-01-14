@@ -3,7 +3,7 @@ Processing code and instructions for running 3D-RCAN for denoising, followed by 
 Start by cloning this environment into a directory.
 ## Notes
 * The 3D-RCAN denoising was run on the following machine (but should also run on Linux)
-    + Windows 11
+    + Ubuntu 24.04.1 LTS
     + Intel(R) Xeon(R) w7-3465X   2.50 GHz
     + 256 GB RAM
     + NVIDIA RTX A4000 (16GB VRAM)
@@ -11,20 +11,26 @@ Start by cloning this environment into a directory.
     + CUDA 10.0 and cuDNN 7.6.5 
 
 * The processing steps and fnet image translation were similarly run but with the following changes
-    + Ubuntu (24.04.1) (explicitly not tested on Windows)
     + CUDA 12.3 and cuDNN 8.9.2
 
-* This should all be transferable to a compute cluster, but is not yet supported.
-* Managing different CUDA installations is possible through an environment manager like [miniforge](https://mamba.readthedocs.io/en/latest/installation/mamba-installation.html) conda or mamba. 
+* This should all be transferable to th compute cluster, but is not yet supported.
+* Managing different CUDA installations is possible through an environment manager such as [miniforge](https://mamba.readthedocs.io/en/latest/installation/mamba-installation.html) conda or mamba. 
 See [this](https://docs.nvidia.com/cuda/cuda-installation-guide-microsoft-windows/#using-conda-to-install-the-cuda-software) and [this](https://hamel.dev/notes/cuda.html) for help.
 
 ## Instructions
+Clone this reponsitory into your local directory by running
+```
+git clone [https://github.com/opp1231/denoise_and_translate](https://github.com/opp1231/denoise_and_translate)
+```
 ### Histogram Matching
 To best-replicate the denoising and prediction, it is best-practice to histogram match the inputs to the training data
 Since the intensity information is not compared experiment to experiment, this is fine to do.
 
 #### Steps: 
 1. Create a new python environment with your preferred environment manager (we suggest miniforge)
+    ```
+    conda create -n processing
+    ```
 2. Install the dependencies from requirements_processing.txt
 3. Ensure you are in the rcan working directory
 4. Run 
@@ -39,7 +45,15 @@ Input keratin signal is denoised using [3D-RCAN](https://github.com/AiviaCommuni
 
 #### Steps: 
 1. Create a new python environment with your preferred environment manager with python=3.7
-2. Install dependencies as stated on the repository's site.
+    ```
+    conda create -n rcan python=3.7
+    ```
+2. Install dependencies as follows
+    ```
+    conda install tensorflow-gpu=1.13.1
+    conda install cudatoolkit=10.0.*
+    python -m pip install requirements_rcan.txt
+    ```
 2. Install the dependencies from requirements_rcan.txt (including the specific CUDA and cudnn versions, if necessary).
     * If running this on Windows, you may need to ensure your CUDA path is set correctly. See [this](https://stackoverflow.com/questions/69632875/cuda-path-not-detected-set-cuda-path-environment-variable-if-cupy-fails-to-load) for help.
 3. Ensure you are in the code working directory
