@@ -139,4 +139,4 @@ for raw_file, gt_file in data:
         output_file = output_path
 
     print('Saving output image to', output_file)
-    save_tiff(str(output_file), result, args.output_tiff_format)
+    save_tiff(str(output_file), result[1,:,:], args.output_tiff_format)
