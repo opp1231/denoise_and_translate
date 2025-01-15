@@ -4,7 +4,8 @@ from skimage.morphology import ball
 from skimage.exposure import match_histograms
 import tifffile
 import os
-from pathlib import Path, PurePath
+from pathlib import Path
+import argparse
 
 def parse_args():
     parser = argparse.ArgumentParser(description='Histogram match volumes to the 3DRCAN training data')
