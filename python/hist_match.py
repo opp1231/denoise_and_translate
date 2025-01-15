@@ -1,6 +1,6 @@
 import numpy as np
 from skimage import restoration
-from skimage.morphology import disk
+from skimage.morphology import ball
 from skimage.exposure import match_histograms
 import tifffile
 import os
@@ -15,8 +15,13 @@ def parse_args():
 
     return args
 
-def subtract_background(image, radius=50):
-        return image - restoration.rolling_ball(image,radius=radius)
+def subtract_background(image, radius=50, light_bg=False):
+        from skimage.morphology import white_tophat, black_tophat, disk
+        str_el = ball(radius) #you can also use 'ball' here to get a slightly smoother result at the cost of increased computing time
+        if light_bg:
+            return black_tophat(image, str_el)
+        else:
+            return white_tophat(image, str_el)
 
 def hist_match(ref_ddir,ddir):
 
