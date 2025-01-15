@@ -48,7 +48,7 @@ def hist_match(ref_ddir,ddir):
             img_bgsub = subtract_background(img)
             # background = restoration.rolling_ball(
             #     img, kernel=disk(50))
-            img_hist_match = match_histograms(img,multichannel_image,channel_axis=None)
+            img_hist_match = match_histograms(img_bgsub,multichannel_image,channel_axis=None)
 
             tifffile.imwrite(os.path.join(out_dir,fname),img_hist_match.astype(np.uint16))
             print(f'Finished file ' + str(nn))
