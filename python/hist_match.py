@@ -28,14 +28,20 @@ def hist_match(ref_ddir,ddir):
 
 
     out_dir = os.path.join(ddir,f'denoised_bgsub_histmatch_16')
+    if not os.path.exists(out_dir): 
+      
+    # if the demo_folder directory is not present  
+    # then create it. 
+        os.makedirs(out_dir) 
     for nn, fname in enumerate(os.listdir(ddir)):
         ext = Path(fname).suffix
         if ext == '.tif':
             img = tifffile.imread(os.path.join(ddir,fname))
-            img_hist_match = match_histograms(img,multichannel_image,channel_axis=None)
             background = restoration.rolling_ball(
-                img_hist_match, kernel=ball(50))
-            tifffile.imwrite(os.path.join(out_dir,fname),(img_hist_match-background).astype(np.uint16))
+                img, kernel=ball(50))
+            img_hist_match = match_histograms(img-background,multichannel_image,channel_axis=None)
+
+            tifffile.imwrite(os.path.join(out_dir,fname),img_hist_match.astype(np.uint16))
             print(f'Finished file ' + str(nn))
         
 def main():
