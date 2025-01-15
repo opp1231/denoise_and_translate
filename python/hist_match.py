@@ -27,12 +27,12 @@ def rolling_ball_3d(volume, radius):
 def subtract_background(volume, radius=50, light_bg=False):
     background = np.zeros_like(volume)
         # str_el = ball(radius) #you can also use 'ball' here to get a slightly smoother result at the cost of increased computing time
-    if light_bg:
-        for i in range(volume.shape[0]):
-            background[i,:,:] = restoration.rolling_ball(volume[i,:,:], radius=radius)
-    else:
-        for i in range(volume.shape[0]):
-            background[i,:,:] = restoration.rolling_ball(volume[i,:,:], radius=radius)
+    # if light_bg:
+    #     for i in range(volume.shape[0]):
+    #         background[i,:,:] = restoration.rolling_ball(gaussian(volume[i,:,:],sigma=2.0), radius=radius)
+    # else:
+    for i in range(volume.shape[0]):
+        background[i,:,:] = restoration.rolling_ball(volume[i,:,:], radius=radius)
     return volume - background
 
 def hist_match(ref_ddir,ddir,out_dir,bg_sub=False):
