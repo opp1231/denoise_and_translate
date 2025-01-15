@@ -1,7 +1,7 @@
 import numpy as np
 from skimage import restoration
 from skimage.filters import gaussian
-# from skimage.morphology import disk
+from skimage.morphology import disk, white_tophat
 from skimage.exposure import match_histograms
 import tifffile
 import os
@@ -32,8 +32,8 @@ def subtract_background(volume, radius=50, light_bg=False):
     #         background[i,:,:] = restoration.rolling_ball(gaussian(volume[i,:,:],sigma=2.0), radius=radius)
     # else:
     for i in range(volume.shape[0]):
-        # background[i,:,:] = restoration.rolling_ball(gaussian(volume[i,:,:],sigma=2.0), radius=radius)
-        background[i,:,:] = restoration.rolling_ball(volume[i,:,:], radius=radius)
+        background[i,:,:] = restoration.white_tophat(gaussian(volume[i,:,:],sigma=2.0), disk(radius))
+        # background[i,:,:] = restoration.rolling_ball(volume[i,:,:], radius=radius)
     return volume - background
 
 def hist_match(ref_ddir,ddir,out_dir,bg_sub=False):
