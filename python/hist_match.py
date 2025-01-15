@@ -59,7 +59,7 @@ def hist_match(ref_ddir,ddir,out_dir,bg_sub=False):
             img = tifffile.imread(os.path.join(ddir,fname))
             if bg_sub:
                 # img_new = subtract_background(gaussian(img,sigma=2.0))
-                img_new = subtract_background(img,sigma=2.0)
+                img_new = subtract_background(img)
             else:
                 # img_new = np.copy(gaussian(img,sigma=2.0))
                 img_new = np.copy(img)
