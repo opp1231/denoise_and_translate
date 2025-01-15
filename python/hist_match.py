@@ -1,5 +1,7 @@
 import numpy as np
-from skimage import data, restoration
+from skimage import restoration
+from skimage.morphology import ball
+from skimage.exposure import match_histograms
 import tifffile
 import os
 from pathlib import Path, PurePath
@@ -23,14 +25,16 @@ def hist_match(ref_ddir,ddir):
                 im_list.append(tifffile.imread(os.path.join(ref_ddir,fname)))
     multichannel_image = np.vstack(im_list)
 
-    from skimage.exposure import match_histograms
+
     out_dir = os.path.join(ddir,f'denoised_bgsub_histmatch_16')
     for nn, fname in enumerate(os.listdir(ddir)):
         ext = Path(fname).suffix
         if ext == '.tif':
             img = tifffile.imread(os.path.join(ddir,fname))
             img_hist_match = match_histograms(img,multichannel_image,channel_axis=None)
-            tifffile.imwrite(os.path.join(out_dir,fname),img_hist_match.astype(np.uint16))
+            background = restoration.rolling_ball(
+                img_hist_match, kernel=ball(50))
+            tifffile.imwrite(os.path.join(out_dir,fname),(img_hist_match-background).astype(np.uint16))
             print(f'Finished file ' + str(nn))
         
 def main():
