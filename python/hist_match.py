@@ -15,6 +15,14 @@ def parse_args():
 
     return args
 
+def subtract_background(image, radius=50, light_bg=False):
+        from skimage.morphology import white_tophat, black_tophat, disk
+        str_el = disk(radius) #you can also use 'ball' here to get a slightly smoother result at the cost of increased computing time
+        if light_bg:
+            return black_tophat(image, str_el)
+        else:
+            return white_tophat(image, str_el)
+
 def hist_match(ref_ddir,ddir):
 
     im_list = []
@@ -37,9 +45,10 @@ def hist_match(ref_ddir,ddir):
         ext = Path(fname).suffix
         if ext == '.tif':
             img = tifffile.imread(os.path.join(ddir,fname))
-            background = restoration.rolling_ball(
-                img, kernel=disk(50))
-            img_hist_match = match_histograms(img-background,multichannel_image,channel_axis=None)
+            img_bgsub = subtract_background(img)
+            # background = restoration.rolling_ball(
+            #     img, kernel=disk(50))
+            img_hist_match = match_histograms(img,multichannel_image,channel_axis=None)
 
             tifffile.imwrite(os.path.join(out_dir,fname),img_hist_match.astype(np.uint16))
             print(f'Finished file ' + str(nn))
