@@ -26,10 +26,10 @@ def subtract_background(volume, radius=50, light_bg=False):
         # str_el = ball(radius) #you can also use 'ball' here to get a slightly smoother result at the cost of increased computing time
     if light_bg:
         for i in range(volume.shape[0]):
-            background[i] = black_tophat(volume[i], radius=radius)
+            background[i] = black_tophat(volume[i], disk(radius))
     else:
         for i in range(volume.shape[0]):
-            background[i] = white_tophat(volume[i], radius=radius)
+            background[i] = white_tophat(volume[i], disk(radius))
     return volume - background
 
 def hist_match(ref_ddir,ddir):
