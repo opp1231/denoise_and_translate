@@ -1,6 +1,6 @@
 import numpy as np
 from skimage import restoration
-from skimage.morphology import ball
+from skimage.morphology import disk
 from skimage.exposure import match_histograms
 import tifffile
 import os
@@ -38,7 +38,7 @@ def hist_match(ref_ddir,ddir):
         if ext == '.tif':
             img = tifffile.imread(os.path.join(ddir,fname))
             background = restoration.rolling_ball(
-                img, kernel=ball(50))
+                img, kernel=disk(50))
             img_hist_match = match_histograms(img-background,multichannel_image,channel_axis=None)
 
             tifffile.imwrite(os.path.join(out_dir,fname),img_hist_match.astype(np.uint16))
