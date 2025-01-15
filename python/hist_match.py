@@ -1,6 +1,7 @@
 import numpy as np
 from skimage import restoration
-from skimage.morphology import disk, white_tophat, black_tophat
+from skimage.filters import gaussian
+# from skimage.morphology import disk
 from skimage.exposure import match_histograms
 import tifffile
 import os
@@ -28,10 +29,10 @@ def subtract_background(volume, radius=50, light_bg=False):
         # str_el = ball(radius) #you can also use 'ball' here to get a slightly smoother result at the cost of increased computing time
     if light_bg:
         for i in range(volume.shape[0]):
-            background[i] = restoration.rolling_ball(volume[i], radius=radius)
+            background[i,:,:] = restoration.rolling_ball(volume[i,:,:], radius=radius)
     else:
         for i in range(volume.shape[0]):
-            background[i] = restoration.rolling_ball(volume[i], radius=radius)
+            background[i,:,:] = restoration.rolling_ball(volume[i,:,:], radius=radius)
     return volume - background
 
 def hist_match(ref_ddir,ddir,out_dir,bg_sub=False):
@@ -57,8 +58,10 @@ def hist_match(ref_ddir,ddir,out_dir,bg_sub=False):
         if ext == '.tif':
             img = tifffile.imread(os.path.join(ddir,fname))
             if bg_sub:
-                img_new = subtract_background(img)
+                # img_new = subtract_background(gaussian(img,sigma=2.0))
+                img_new = subtract_background(img,sigma=2.0)
             else:
+                # img_new = np.copy(gaussian(img,sigma=2.0))
                 img_new = np.copy(img)
             # background = restoration.rolling_ball(
             #     img, kernel=disk(50))
