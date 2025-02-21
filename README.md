@@ -148,7 +148,7 @@ The raw results from the image translation include some spurious signal from poo
 
 #### File Renaming
 Throughout the pipeline, the images will have been renamed "im_x.tif". To make these again compatible with the MOSAIC processing pipeline, we need to rename them accordingly. We have included a scipt to do so. It can be run in the cellpose environment (it requires no special packages)
-1. 1. Activate the processing environment
+1. Activate the processing environment
     ```
     conda activate processing
     ```
