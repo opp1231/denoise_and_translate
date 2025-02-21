@@ -88,6 +88,8 @@ Sometimes the denoised images still exhibit substantial background inside cells 
 3. Run the macro
 4. Select the path to the folder containing the denoised images.
 
+The resulting images will be saved in the folder "denoised_bgsub_16bit" inside the data directory. This will be the input to the image translation model in the next step.
+
 ### Image Translation
 Nuclear signal is predicted from the denoised keratin signal using [fnet](https://github.com/AllenCellModeling/pytorch_fnet).
 
