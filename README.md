@@ -1,6 +1,8 @@
 # denoise_and_translate
 Processing code and instructions for running 3D-RCAN for denoising, followed by fnet for image translation.
 
+Note: these models were trained on data acquired using the "XY-Scanning" mode on the MOSAIC. Accuracy for applying these models on data acquired in other modes is not guaranteed.
+
 ## Notes
 * The 3D-RCAN denoising was run on the following machine (but should also run on Linux)
     + Ubuntu 24.04.1 LTS 
