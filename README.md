@@ -128,15 +128,31 @@ The raw results from the image translation include some spurious signal from poo
 ##### Steps: 
 1. Install Cellpose following the instructions at the link above.
 2. Activate the cellpose environment.
-3. run 
+3. Run 
     ```
     python segment_cellpose.py /path/to/fnet/predictions/ /path/to/cellpose/model/
     ```
     * The fnet prediction path is the output directory from fnet
     * The cellpose model directory is the path to the "cellpose_models" folder in this repository.
+4. Run
+    ```
+    conda deactivate
+    ```
 
 #### File Renaming
-Throughout the pipeline, the images will have been renamed "im_x.tif". To make these again compatible with the MOSAIC processing pipeline, we need to rename them accordingly. 
+Throughout the pipeline, the images will have been renamed "im_x.tif". To make these again compatible with the MOSAIC processing pipeline, we need to rename them accordingly. We have included a scipt to do so. It can be run in the cellpose environment (it requires no special packages)
+1. 1. Activate the processing environment
+    ```
+    conda activate processing
+    ```
+2. Run
+    ```
+    python file_renamer.py 
+    ```
+3. Run
+    ```
+    conda deactivate
+    ```
 
 #### MOSAIC Pipeline
-The denoiser was trained on deconvolved volumes as ground truth, so the only module which needs to be run is the "deskew" option, if the scanning mode necessitates it. (Note: since the training data was taken in XY-scanning mode, deskewing was required. It is recommended this remain consistent to preserve the features learned by the model)
+The denoiser was trained on deconvolved volumes as ground truth, so the only module which needs to be run is the "deskew" option, if the scanning mode necessitates it. See [MOSAIC Pipeline](https://aicjanelia.github.io/LLSM/) for details. (Note: since the training data was taken in XY-scanning mode, deskewing was required. It is recommended this remain consistent to preserve the features learned by the model)

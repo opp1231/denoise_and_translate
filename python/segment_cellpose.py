@@ -1,6 +1,6 @@
 import argparse
 import numpy as np
-import matplotlib.pyplot as plt
+from pathlib import Path
 from cellpose import models
 from cellpose.io import imread, imsave
 import os
@@ -8,7 +8,7 @@ from glob import glob
 
 def parse_args():
     parser = argparse.ArgumentParser(description='Histogram match volumes to the 3DRCAN training data')
-    parser.add_argument('input_dir', type=Path, help='path to base directory containing the experiment we want to modify')
+    parser.add_argument('input_dir', type=str, help='path to base directory containing the experiment we want to modify')
     parser.add_argument('model_dir', type=str, help='name of the directory containing the pretrained Cellpose model')
     args = parser.parse_args()
 
@@ -16,13 +16,13 @@ def parse_args():
 
 
 def segment(data_dir, model_dir):
-    os.environ["CELLPOSE_LOCAL_MODELS_PATH"] = model_dir
-    model = models.CellposeModel(gpu=True, model_type='pred_nuc_seg')
+    # os.environ["CELLPOSE_LOCAL_MODELS_PATH"] = model_dir
+    model = models.CellposeModel(gpu=True, model_type=os.path.join(model_dir,'pred_nuc_seg'))
 
-    files = sorted(glob(data_dir+'\*.tif'))
+    files = sorted(glob(data_dir+'/*.tif'))
     channels=[0,0]
 
-    save_dir = data_dir+'\segmented'
+    save_dir = os.path.join(data_dir,f'segmented')
     os.makedirs(save_dir,exist_ok=True)
     for file in files:
         print('Processing ' + os.path.split(file)[1])
@@ -36,8 +36,7 @@ def segment(data_dir, model_dir):
 
         temp = np.zeros_like(imgs)
         temp[mask>0] = imgs_nuc_norm_smooth[mask>0]
-        
-        fname= os.path.join(save_dir,os.path.split(file)[1])
+        fname= os.path.join(save_dir,'im_'+os.path.split(file)[1].split('_')[0]+'.tif')
         imsave(fname,temp)
         print('Finished processing ' + os.path.split(file)[1])
 

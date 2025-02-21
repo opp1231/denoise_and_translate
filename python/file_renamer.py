@@ -9,7 +9,6 @@ def parse_args():
     parser.add_argument('inpath', type=Path, help='path to the data')
     parser.add_argument('camera',type=str, help = 'Camera A or B')
     parser.add_argument('refpath', type=Path, help='path to data name to copy')
-    parser.add_argument('ftag', type=str, help='tag to append to end of filename')
     parser.add_argument('--dry-run', '-d',default=False, action='store_true', dest='dryrun',help='execute by printing names to output.txt rather than renaming')
     args = parser.parse_args()
 
@@ -44,6 +43,7 @@ def file_renamer(folder,comp_folder,cam,tag,dryrun=False):
 
         pattern_tile = re.compile(r'(?<=[stack])[0-9]+')
         for count, filename in enumerate(os.listdir(folder)):
+            print(filename)
             ext = Path(filename).suffix
             m = re.findall(pattern_tile,filename)
             # if ext=='.tif' and m[0]:
@@ -74,7 +74,7 @@ def file_renamer(folder,comp_folder,cam,tag,dryrun=False):
 def main():
     args = parse_args()
 
-    file_renamer(folder=args.inpath,comp_folder=args.refpath,cam=args.camera,tag=args.ftag,dryrun=args.dryrun)
+    file_renamer(folder=args.inpath,comp_folder=args.refpath,cam=args.camera,tag='prednuc',dryrun=args.dryrun)
 
 
 if __name__ == '__main__':
