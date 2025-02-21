@@ -21,7 +21,7 @@ def make_csv(ddir,inpath):
 	in_ims_dir = inpath
 	out_ims_dir = inpath
 
-	with open(os.path.join(ddir,'data_pred_new_temp.csv'), 'w', newline='') as file:
+	with open(os.path.join(ddir,'data_pred.csv'), 'w', newline='') as file:
 		writer = csv.writer(file, delimiter=',',
 					quotechar='|', quoting=csv.QUOTE_MINIMAL)
 

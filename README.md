@@ -81,6 +81,13 @@ Input keratin signal is denoised using [3D-RCAN](https://github.com/AiviaCommuni
     conda deactivate
     ```
 
+### Background Subtraction
+Sometimes the denoised images still exhibit substantial background inside cells which will impact the nucleus prediction. To remedy this, we use FIJI's "Subtract background" function. This can be run in batch mode using the "bg_sub.ijm" macro included in the repository.
+1. Open FIJI
+2. Load the macro.
+3. Run the macro
+4. Select the path to the folder containing the denoised images.
+
 ### Image Translation
 Nuclear signal is predicted from the denoised keratin signal using [fnet](https://github.com/AllenCellModeling/pytorch_fnet).
 
@@ -105,8 +112,7 @@ Nuclear signal is predicted from the denoised keratin signal using [fnet](https:
     ```
 3. Install the dependencies 
     ```
-    cd pytorch_fnet/
-    python -m pip install .
+    python -m pip install -r requirements_fnet.txt
     ```
 5. Edit the "predict_options.json".
     * The only thing one should need to change is the path to the csv created in the previous step.
