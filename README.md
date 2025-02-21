@@ -162,4 +162,4 @@ Throughout the pipeline, the images will have been renamed "im_x.tif". To make t
     ```
 
 #### MOSAIC Pipeline
-The denoiser was trained on deconvolved volumes as ground truth, so the only module which needs to be run is the "deskew" option, if the scanning mode necessitates it. See [MOSAIC Pipeline](https://aicjanelia.github.io/LLSM/) for details. (Note: since the training data was taken in XY-scanning mode, deskewing was required. It is recommended this remain consistent to preserve the features learned by the model)
+The denoiser was trained on deconvolved volumes as ground truth, so the only module which needs to be run is the "deskew" option. See [MOSAIC Pipeline](https://aicjanelia.github.io/LLSM/) for details. (Note: since the training data was taken in XY-scanning mode, deskewing was required. It is recommended this remain consistent to preserve the features learned by the model. It could function on data acquired using "Objective Scanning" mode, but this has not been heavily tested.)
