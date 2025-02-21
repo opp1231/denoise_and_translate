@@ -1,6 +1,6 @@
 # denoise_and_translate
 Processing code and instructions for running 3D-RCAN for denoising, followed by fnet for image translation.
-Start by cloning this environment into a directory.
+
 ## Notes
 * The 3D-RCAN denoising was run on the following machine (but should also run on Linux)
     + Ubuntu 24.04.1 LTS 
