@@ -13,7 +13,7 @@ Start by cloning this environment into a directory.
 * The processing steps and fnet image translation were similarly run but with the following changes
     + CUDA 12.3 and cuDNN 8.9.2
 
-* This should all be transferable to th compute cluster, but is not yet supported.
+* This should all be transferable to the compute cluster, but has not been tested.
 * Managing different CUDA installations is possible through an environment manager such as [miniforge](https://mamba.readthedocs.io/en/latest/installation/mamba-installation.html) conda or mamba. 
 See [this](https://docs.nvidia.com/cuda/cuda-installation-guide-microsoft-windows/#using-conda-to-install-the-cuda-software) and [this](https://hamel.dev/notes/cuda.html) for help.
 
