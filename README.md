@@ -100,7 +100,7 @@ Nuclear signal is predicted from the denoised keratin signal using [fnet](https:
 ##### Initialize and run fnet
 1. Create a new python environment with your preferred environment manager (we suggest miniforge) with python = 3.7.
     ```
-    conda create -n fnet python=3.7
+    conda create -n fnet python=3.8
     conda activate fnet
     ```
 3. Install the dependencies 
