@@ -134,15 +134,14 @@ Nuclear signal is predicted from the denoised keratin signal using [fnet](https:
 The raw results from the image translation include some spurious signal from poorly defined keratin signal. As such, we will use a pre-trained CellPose model to segment nuclei and clean the volumes. This assumes one already installed a working copy of [CellPose](https://github.com/MouseLand/cellpose).
 
 ##### Steps: 
-1. Install Cellpose following the instructions at the link above.
-2. Activate the cellpose environment.
-3. Run 
+1. Activate the cellpose environment.
+2. Run 
     ```
     python segment_cellpose.py /path/to/fnet/predictions/ /path/to/cellpose/model/
     ```
     * The fnet prediction path is the output directory from fnet
     * The cellpose model directory is the path to the "cellpose_models" folder in this repository.
-4. Run
+3. Run
     ```
     conda deactivate
     ```
