@@ -3,7 +3,7 @@ Processing code and instructions for running 3D-RCAN for denoising, followed by 
 Start by cloning this environment into a directory.
 ## Notes
 * The 3D-RCAN denoising was run on the following machine (but should also run on Linux)
-    + Ubuntu 24.04.1 LTS (or Windows 11)
+    + Ubuntu 24.04.1 LTS 
     + Intel(R) Xeon(R) w7-3465X   2.50 GHz
     + 256 GB RAM
     + NVIDIA RTX A4000 (16GB VRAM)
@@ -16,6 +16,8 @@ Start by cloning this environment into a directory.
 * This should all be transferable to th compute cluster, but is not yet supported.
 * Managing different CUDA installations is possible through an environment manager such as [miniforge](https://mamba.readthedocs.io/en/latest/installation/mamba-installation.html) conda or mamba. 
 See [this](https://docs.nvidia.com/cuda/cuda-installation-guide-microsoft-windows/#using-conda-to-install-the-cuda-software) and [this](https://hamel.dev/notes/cuda.html) for help.
+
+* Installation instructions apply only to the first time this pipeline is run. Afterwards, activating each environment is sufficient.
 
 ## Instructions
 Clone this reponsitory into your local directory by running
@@ -113,58 +115,25 @@ Nuclear signal is predicted from the denoised keratin signal using [fnet](https:
     ```
     fnet predict.py --json /path/to/predict_options.json
     ```
+7. Deactivate the environment
+    ```
+    conda deactivate
+    ```
 
 ### Post-Processing
-Nuclear signal is predicted from the denoised keratin signal using [fnet](https://github.com/AllenCellModeling/pytorch_fnet)
 
 #### Segmentation
-The raw results from the image translation include some spurious signal from poorly defined keratin signal. As such, we will use a pre-trained CellPose model to segment nuclei and clean the volumes. This assumes one already installed a working copy of CellPose.
+The raw results from the image translation include some spurious signal from poorly defined keratin signal. As such, we will use a pre-trained CellPose model to segment nuclei and clean the volumes. This assumes one already installed a working copy of [CellPose](https://github.com/MouseLand/cellpose).
 
 ##### Steps: 
-1. Create a new python environment with your preferred environment manager (we suggest miniforge) with python = 3.7.
-2. Clone the fnet repository and follow the installation instructions on the repository's page.
-    * The predict.py file in the fnet codebase (/fnet/cli/predict.py) needs to be edited to allow "big" tiffs.
-        - In predict.py, rewrite the function "save_tiff" as follows
-        ```
-        def save_tif(fname: str, ar: np.ndarray, path_root: str) -> str:
-        """Saves a tif and returns tif save path relative to root save directory.
-
-        Image will be stored at: 'path_root/tifs/fname'
-
-        Parameters
-        ----------
-        fname
-            Basename of save path.
-        ar
-            Array to be saved as tif.
-        path_root
-            Root directory of save path.
-
-        Returns
-        -------
-        str
-            Save path relative to root directory.
-
-        """
-        norm_arr = (2**8)*(ar - np.min(ar))/(np.max(ar)-np.min(ar))
-        norm_arr_u8 = norm_arr.astype(np.uint8)
-        path_tif_dir = os.path.join(path_root, "tifs")
-        if not os.path.exists(path_tif_dir):
-            os.makedirs(path_tif_dir)
-            logger.info(f"Created: {path_tif_dir}")
-        path_save = os.path.join(path_tif_dir, fname)
-        tifffile.imsave(path_save,norm_arr_u8,compress=2,bigtiff=True)
-        logger.info(f"Saved: {path_save} normalized")
-        return os.path.relpath(path_save, path_root)
-        ```
-3. Install the dependencies from requirements_fnet.txt
-4. Ensure you are in the code working directory
-5. Run 
+1. Install Cellpose following the instructions at the link above.
+2. Activate the cellpose environment.
+3. run 
     ```
-    python hist_match.py /path/to/reference/dir/ /path/to/input/dir/
+    python segment_cellpose.py /path/to/fnet/predictions/ /path/to/cellpose/model/
     ```
-    * The reference directory will always be /nrs/path/tp/val/data/ (uncles a new model is trained)
-    * The input path will be the path to the folder containing the low-laser power keratin volumes
+    * The fnet prediction path is the output directory from fnet
+    * The cellpose model directory is the path to the "cellpose_models" folder in this repository.
 
 #### File Renaming
 Throughout the pipeline, the images will have been renamed "im_x.tif". To make these again compatible with the MOSAIC processing pipeline, we need to rename them accordingly. 
